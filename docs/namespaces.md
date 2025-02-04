@@ -1,7 +1,7 @@
 # Adding Custom Namespace/Framework Specific APIs
 
 This document provides a step-by-step guide on how to add custom namespace/framework APIs by using an example implementations: `SampleFrameworkAPI`.
-The example implementation can be found in [examples/sample_namespace/sample_feature_api.py](examples/sample_namespace/sample_feature_api.py).
+The example implementation can be found in [examples/sample_namespace/sample_feature_api.py](/examples/sample_namespace/sample_feature_api.py).
 
 ## Overview
 
@@ -100,8 +100,8 @@ class SampleConfigAPIMapper(BaseConfigAPIMapper):
 
 - The `SampleConfigAPIMapper` overrides the `parse_config_and_api` method of the parent class and adds custom logic to parse the config.
 - In this case, the config file contains _gemms_, _tensor_, _gemms\_struct_ or _tensors_struct_ along with other parameters.
-- The base class provides a helper function to parse tensor configs - see `BaseConfigAPIMapper` in [nvdlfw_inspect/base.py](nvdlfw_inspect/base.py).
-- If your use-case is adding features that work only on tensor-level granularity, you can reuse the `GenericConfigAPIMapper` provided in [nvdlfw_inspect/debug_features/generic_feature_api.py](nvdlfw_inspect/debug_features/generic_feature_api.py) that already implements parsing config based on tensors.
+- The base class provides a helper function to parse tensor configs - see `BaseConfigAPIMapper` in [nvdlfw_inspect/base.py](/nvdlfw_inspect/base.py).
+- If your use-case is adding features that work only on tensor-level granularity, you can reuse the `GenericConfigAPIMapper` provided in [nvdlfw_inspect/debug_features/generic_feature_api.py](/nvdlfw_inspect/debug_features/generic_feature_api.py) that already implements parsing config based on tensors.
 
 
 ### 2. Default Features Implementation
