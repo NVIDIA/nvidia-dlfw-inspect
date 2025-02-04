@@ -142,7 +142,7 @@ This function must be called once on every rank in global context to initialize 
 * **config_file** ( *str* , default=""): Path to the `config.yaml` file specifying features and layer names.
 * **feature_dirs** ( *List[str] | str* ): Directories containing custom features to load. If empty, only [default features](/nvdlfw_inspect/debug_features) are available. In the example above feature directory for [FakeQuantization](/examples/sample_namespace) is provided
 * **log_dir** ( *str* , default= "."): Directory where logs and statistics will be stored. The tool creates two subdirectories in the `log_dir` path: `nvdlfw_inspect_logs` and `nvdlfw_inspect_statistics_logs`
-* **statistics_logger** ( *Union[BaseLogger, None]* , default=None): Custom Logger for logging tensor statistics. Should adhere to `BaseLogger` from the [Nvidia-DLFramework-Inspect](0) package.
+* **statistics_logger** ( *Union[BaseLogger, None]* , default=None): Custom Logger for logging tensor statistics. Should adhere to `BaseLogger` from the Nvidia-DLFramework-Inspect package.
 * **tb_writer** ( *TensorBoardWriter* , default=None): TensorBoard writer for logging.
 
 ### 3. Debug Config Yaml
