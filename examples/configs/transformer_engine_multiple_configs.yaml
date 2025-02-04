@@ -1,0 +1,32 @@
+transformer_engine_qkv_stats:
+  enabled: True
+  layers:
+    layer_name_regex_pattern: .*(qkv) # Select layers if they end in qkv
+  transformer_engine:
+    LogTensorStats:
+      enabled: True
+      stats: [dynamic_range] # types of statistics
+      tensors: [activation, gradients] # tensors to log
+      freq: 50 # logging frequency in train steps
+      start_step: 10 # train step to start logging
+      end_step: 1000 # train step to stop logging
+
+
+transformer_engine_mlp_manipulation:
+  enabled: True
+  layers:
+    layer_name_regex_pattern: .*(fc1|fc2) # Select layers if they end in fc1 or fc2
+  transformer_engine: # namespace
+    DisableFp8Gemm: # Disable FP8 GEMM. FProp run in high precision
+      enabled: True
+      gemms: [fprop]
+    PerTensorScaling: # Scale DGrad inputs using per tensor current scaling and run FP8 GEMM
+      enabled: True
+      gemms: [dgrad]
+      tensors: [gradient, weight]
+    FakeQuantFp8: # Disable FP8 GEMM for WGrad. Fake quantize inputs to WGrad and run high precision GEMM
+      enabled: True
+      gemms_struct:
+        - gemm: wgrad
+          tensors: [activation, gradient]
+          quant_format: E5M2

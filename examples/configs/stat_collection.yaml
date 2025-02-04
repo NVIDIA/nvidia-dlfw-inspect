@@ -1,0 +1,11 @@
+self_attention_activations_stats:
+  enabled: True
+  layers:
+    layer_type: [self_attention] # Select layers if "self_attention" in name.
+  LogTensorStats: # generic logging feature
+    enabled: True
+    stats: [max, min, mean, std, l1_norm] # types of statistics
+    tensors: [activation] # tensors to log
+    freq: 100 # logging frequency in train steps
+    start_step: 10 # train step to start logging
+    end_step: 1000 # train step to stop logging

@@ -1,0 +1,33 @@
+fprop_bf16_bwd_per_tensor_scaling:
+  enabled: True
+  layers:
+    layer_name_regex_pattern: .*(fc1|fc2) # Regex pattern selecting all layers ending with fc1 or fc2
+  LogTensorStats:
+    enabled: True
+    stats: [min, max]
+    freq: 100
+    tensors: [activation, weight, gradient]
+    start_step: 1000
+  transformer_engine:
+    DisableFp8Gemm: # disable FP8 GEMM feature. Fprop runs in high precision
+      enabled: True
+      gemms: [fprop]
+    LogTensorStats: # Transformer_engine specific statistics
+      enabled: True
+      stats: [cur_amax, dynamic_range]
+      tensors: [activation, weight]
+      freq: 100
+      start_step: 1000
+    LogFp8TensorStats: # Transformer_engine specific FP8 statistics
+      enabled: True
+      stats: [underflows, overflows]
+      tensors: [gradient]
+      freq: 100
+      start_step: 1000
+    PerTensorScaling: # per tensor current scaling for dgrad and wgrad
+        enabled: True
+        gemms_struct:
+          - gemm: dgrad
+            tensors: [gradient, weight] # For dgrad gemm, gradient and weight are per tensor scaled
+          - gemm: wgrad
+            tensors: [gradient] # For wgrad gemm, gradient is per tensor scaled. Activation is default (delayed scaled)

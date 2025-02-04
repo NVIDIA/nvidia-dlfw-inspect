@@ -1,0 +1,27 @@
+sample_model_train_log_stats:
+  enabled: True
+  layers:
+    layer_name_regex_pattern: .*(fc1|fc2|relu)
+  LogTensorStats:
+    enabled: True
+    tensors_struct:
+        - tensor: activation
+          stats: [max, min]
+          freq: 4
+          start_step: 20
+          end_step: 40
+        - tensor: relu_quant_act
+          stats: [mean, max, min]
+          freq: 2
+          start_end_list: [[6, 10], [20, 24], [35, 42]]
+  sample_namespace:
+    FakeQuant:
+      enabled: True
+      gemms_struct:
+        - gemm: fprop
+          tensors_struct:
+            - tensor: relu_quant_act
+              scale: 1
+              zero_point: 0
+              quant_min: 0
+              quant_max: 255

@@ -1,0 +1,37 @@
+stat_collection_1:
+  enabled: True
+  layers:
+    layer_name_regex_pattern: .*(self_attention).*
+  LogTensorStats:
+    enabled: True
+    stats: [max, mean, std, l1_norm]
+    tensors: [gradient]
+    freq: 10
+    start_step: 5
+    end_step: 100
+
+
+stat_collection_2:
+  enabled: True
+  layers:
+    layer_name_regex_pattern: .*(mlp).*
+  LogTensorStats:
+    enabled: True
+    stats: [max, mean, std, l1_norm]
+    tensors: [activation]
+    freq: 10
+    start_step: 5
+    end_step: 100
+
+
+stat_collection_3:
+  enabled: True
+  layers:
+    layer_name_regex_pattern: .*(fc2)
+  LogTensorStats:
+    enabled: True
+    stats: [max, mean, std, l1_norm]
+    tensors: [activation]
+    freq: 10
+    start_step: 5
+    end_step: 100

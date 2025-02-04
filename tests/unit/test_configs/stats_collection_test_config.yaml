@@ -1,0 +1,30 @@
+stat_collection_test_1:
+  enabled: True
+  layers:
+    layer_numbers: [1]
+  LogTensorStats:
+    enabled: True
+    tensors_struct:
+      - tensor: activation
+        stats: [mean, std, l1_norm, l2_norm]
+        freq: 1
+        start_step: 100
+        end_step: 500
+      - tensor: gradient
+        stats: [max, l1_norm, min]
+        freq: 33
+        start_step: 10
+        end_step: 300
+
+stat_collection_test_2:
+  enabled: True
+  layers:
+    layer_numbers: [2]
+  LogTensorStats:
+    enabled: True
+    tensors_struct:
+      - tensor: weight
+        stats: [mean, l1_norm]
+        freq: 5
+        start_step: 10
+        end_step: 100

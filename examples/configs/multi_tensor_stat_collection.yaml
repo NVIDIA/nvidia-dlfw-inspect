@@ -1,0 +1,25 @@
+multi_tensor_stat_collection:
+  enabled: True
+  layers:
+    layer_name_regex_pattern: .*(fc1|self_attention).*
+  LogTensorStats:
+    enabled: True
+    tensors_struct:
+      - tensor: activation
+        stats: [mean]
+        freq: 10
+        start_step: 5
+        end_step: 100
+      - tensor: gradient
+        stats: [mean, max, min]
+        freq: 10
+        start_step: 5
+        end_step: 100
+  transformer_engine:
+    LogTensorStats:
+      enabled: True
+      tensors: [activation, gradient]
+      stats: [dynamic_range, cur_amax]
+      freq: 20
+      start_step: 0
+      end_step: 80
