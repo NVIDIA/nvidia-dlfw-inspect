@@ -7,7 +7,7 @@ Contribution Rules
 
 Contributions are welcome!
 
-To contribute to the nvidia-nvdlfw-inspect, simply create a pull request with the changes on GitHub.
+To contribute to the nvidia-dlfw-inspect, simply create a pull request with the changes on GitHub.
 After the pull request is reviewed by a Developer, approved, and passes the unit and CI tests,
 then it will be merged.
 
