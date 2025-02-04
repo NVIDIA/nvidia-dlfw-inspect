@@ -10,7 +10,7 @@ Additionally, APIs are provided for processing tensors and collecting tensor sta
 
 ### Installation
 
-Please check the installation [doc](docs/installation.md)
+Please check the installation [doc](/docs/installation.md)
 
 ## Initialization
 
@@ -45,7 +45,7 @@ To initialize a configuration file, use the `config_file` argument when initiali
 debug_api.initialize(config_file="debug_config.yaml")
 ```
 
-To learn more about the structure of the config file, check out [docs/config_file.md](docs/config_file.md) or look through some example configs in the `examples/configs/` directory.
+To learn more about the structure of the config file, check out [docs/config_file.md](/docs/config_file.md) or look through some example configs in the `examples/configs/` directory.
 
 ### Loading Specific Features
 
@@ -89,8 +89,8 @@ debug_api.transformer_engine.log_tensor_stats(layer_name, tensor=weight, tensor_
 ## Documentation
 Please read the following docs for more information on adding new features, namespaces and APIs.
 
-- Getting Started: [docs/getting_started.md](docs/getting_started.md)
-- Logging: [docs/logging.md](docs/logging.md)
-- Config: [docs/config_file.md](docs/config_file.md)
-- Debug Features: [docs/features.md](docs/features.md)
-- Namespaces: [docs/namespaces.md](docs/namespaces.md)
+- Getting Started: [docs/getting_started.md](/docs/getting_started.md)
+- Logging: [docs/logging.md](/docs/logging.md)
+- Config: [docs/config_file.md](/docs/config_file.md)
+- Debug Features: [docs/features.md](/docs/features.md)
+- Namespaces: [docs/namespaces.md](/docs/namespaces.md)
