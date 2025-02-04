@@ -2,7 +2,7 @@
 
 This guide explains how to use the **Nvidia DLFW Inspect** tool to debug deep learning model convergence while training a simple model in PyTorch.
 
-Before proceeding, ensure you have set up the tool by following the [installation guide](docs/installation.md)
+Before proceeding, ensure you have set up the tool by following the [installation guide](/docs/installation.md)
 
 This document covers two scenarios:
 
@@ -13,7 +13,7 @@ These functionalities require only minimal changes to your code.
 
 ## Example Training Code
 
-Below is a sample training script. You can also find the complete working example with the debugging APIs: [here](examples/test_simple_model_train.py)
+Below is a sample training script. You can also find the complete working example with the debugging APIs: [here](/examples/test_simple_model_train.py)
 
 ```
 
@@ -140,14 +140,14 @@ This function must be called once on every rank in global context to initialize 
 **Parameters**
 
 * **config_file** ( *str* , default=""): Path to the `config.yaml` file specifying features and layer names.
-* **feature_dirs** ( *List[str] | str* ): Directories containing custom features to load. If empty, only [default features](nvdlfw_inspect/debug_features) are available. In the example above feature directory for [FakeQuantization](examples/sample_namespace) is provided
+* **feature_dirs** ( *List[str] | str* ): Directories containing custom features to load. If empty, only [default features](/nvdlfw_inspect/debug_features) are available. In the example above feature directory for [FakeQuantization](/examples/sample_namespace) is provided
 * **log_dir** ( *str* , default= "."): Directory where logs and statistics will be stored. The tool creates two subdirectories in the `log_dir` path: `nvdlfw_inspect_logs` and `nvdlfw_inspect_statistics_logs`
 * **statistics_logger** ( *Union[BaseLogger, None]* , default=None): Custom Logger for logging tensor statistics. Should adhere to `BaseLogger` from the [Nvidia-DLFramework-Inspect](0) package.
 * **tb_writer** ( *TensorBoardWriter* , default=None): TensorBoard writer for logging.
 
 ### 3. Debug Config Yaml
 
-Below is an example configuration file used in ths guide: [debug config](examples/configs/simple_model_train_sample.yaml)
+Below is an example configuration file used in ths guide: [debug config](/examples/configs/simple_model_train_sample.yaml)
 ```
 sample_model_train_log_stats:
   enabled: True
@@ -180,14 +180,14 @@ sample_model_train_log_stats:
 
 **Brief summary of features**
 
-1. Statistics Logging ([LogTensorStats](nvdlfw_inspect/debug_features/log_tensor_stats.py)):
+1. Statistics Logging ([LogTensorStats](/nvdlfw_inspect/debug_features/log_tensor_stats.py)):
    1. This is one of default features available with this tool for logging stats. You can find more details about the feature by running: `debug_api.explain_features("base.LogTensorStats")`
    2. Max and Min stats will be logged for activation tensors of FC1, FC2, and ReLU layers if the `log_tensor_stats` api is called for each of the tensors.
       1. The logging will start between the training iterations 20 and 40, on every 4th iteration
    3. Mean, Max, Min stats will be logged for the `relu_quant_act` tensor if the `log_tensor_stats` api is called for this tensor
       1. This logging will only happen during the training iterations specified in the `start_end_list` and at a frequency specified.
-2. Tensor Quantization ([FakeQuant](examples/sample_namespace/sample_feature.py))
-   1. This example shows how to use custom features from your own [feature namespace](examples/sample_namespace). In this example, `FakeQuant` debug feature internally calls `torch.fake_quantize_per_tensor_affine`. You can find more details about the feature by running: `debug_api.explain_features("sample_namespace.FakeQuant")`
+2. Tensor Quantization ([FakeQuant](/examples/sample_namespace/sample_feature.py))
+   1. This example shows how to use custom features from your own [feature namespace](/examples/sample_namespace). In this example, `FakeQuant` debug feature internally calls `torch.fake_quantize_per_tensor_affine`. You can find more details about the feature by running: `debug_api.explain_features("sample_namespace.FakeQuant")`
 
 ### 4. debug_api.step()
 
