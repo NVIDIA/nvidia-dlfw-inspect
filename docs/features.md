@@ -1,14 +1,14 @@
 # Defining Custom Features
 In the context of this tool, a feature has a set of APIs that provide a specific functionality for a namespace. Features are defined as classes and are registered to a corresponding namespace.
 
-This document provides a step-by-step guide on how to add a new feature: please check [FakeQuant](examples/sample_namespace/sample_feature.py) for the full implementation.
+This document provides a step-by-step guide on how to add a new feature: please check [FakeQuant](/examples/sample_namespace/sample_feature.py) for the full implementation.
 
 ## Prerequisites
 
 All features must belong to a namespace. The namespace must be defined along with its API, default features and ConfigAPIMapper.
-We provide 2 predefined namespaces that you can attach features too if required - [GenericFrameworkAPI](nvdlfw_inspect/debug_features/generic_feature_api.py) and `TransformerEngineAPI` (This is available on TransformerEngine [Github](https://github.com/NVIDIA/TransformerEngine)) . GenericFrameworkAPI is used for features that can be used within any framework, whereas, TransformerEngineAPI is used for TransformerEngine specific features only.
+We provide 2 predefined namespaces that you can attach features too if required - [GenericFrameworkAPI](/nvdlfw_inspect/debug_features/generic_feature_api.py) and `TransformerEngineAPI` (This will be available on TransformerEngine [Github](https://github.com/NVIDIA/TransformerEngine) soon) . GenericFrameworkAPI is used for features that can be used within any framework, whereas, TransformerEngineAPI is used for TransformerEngine specific features only.
 
-To define new namespaces, refer to [docs/namespaces.md](docs/namespaces.md) doc before creating features.
+To define new namespaces, refer to [docs/namespaces.md](/docs/namespaces.md) doc before creating features.
 
 ## Overview
 
@@ -21,7 +21,7 @@ The process involves the following key components:
 
 Define the feature logic in a separate class and implement the required API methods.
 
-- The following example defines a new feature called `FakeQuant` in the `sample_namespace` namespace. Looking at [examples/sample_namespace](examples/sample_namespace), we see that it just has 1 API - `process_tensor` defined. Hence, this feature can override that API and implement custom logic. A feature class can have more than 1 API based on the use-case (Please check the features in [TransformerEngine](https://github.com/NVIDIA/TransformerEngine) as well)
+- The following example defines a new feature called `FakeQuant` in the `sample_namespace` namespace. Looking at [examples/sample_namespace](/examples/sample_namespace), we see that it just has 1 API - `process_tensor` defined. Hence, this feature can override that API and implement custom logic. A feature class can have more than 1 API based on the use-case (Please check the features in [TransformerEngine](https://github.com/NVIDIA/TransformerEngine) as well)
 - Feature classes also must inherit from the corresponding ConfigAPIMapper to parse the config from the yaml required for APIs to execute.
 - The `process_tensor` API takes as input the parsed config, layer names and other kwargs passed during API call.
 - Finally, the `process_tensor` API requires the decorator `@api_method` so that its registered as an external API.
