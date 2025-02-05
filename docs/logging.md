@@ -70,7 +70,7 @@ debug_api.log_tensor_stats(..., skip_reduction=True)
 ```
 
 2. Pass a logger to the nvdlfw inspect tool on every rank in the last pipeline parallel group and pass the tensor and data parallel group as the reduction group.
-Here is an example of this using a tensorboard writer (already has been setup in Megatron-LM):
+Here is an example of this using a tensorboard writer in Megatron-LM:
 ```python
 tb_writer = None
 # Check if rank is in last pipeline parallel group
