@@ -150,7 +150,9 @@ class SingleMessageLogger:
     logged_messages = set()  # noqa: RUF012
 
     @classmethod
-    def log_message_once(cls, message, layer_name=None, level=logging.INFO):
+    def log_message_once(
+        cls, message, layer_name=None, level=logging.INFO, extra_cachable_args=None
+    ):
         caller_frame = inspect.currentframe().f_back
         feature_call_details = (
             f"{caller_frame.f_code.co_filename}.{caller_frame.f_lineno}"
@@ -159,7 +161,12 @@ class SingleMessageLogger:
             api_call_line = APICacheIdentifier.get_call_details()
         except Exception:
             api_call_line = None
-        message_key = (api_call_line, feature_call_details, layer_name)
+        message_key = (
+            api_call_line,
+            feature_call_details,
+            layer_name,
+            extra_cachable_args,
+        )
         if message_key not in cls.logged_messages:
             if layer_name:
                 get_logger().log_message(f"LAYER={layer_name}: {message}", level=level)
