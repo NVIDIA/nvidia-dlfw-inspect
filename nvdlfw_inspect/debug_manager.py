@@ -171,6 +171,7 @@ class DebugManager:
         return self._namespace_apis[name]
 
     def close(self):
+        self._invoke_for_each_namespace("end_debug")
         ConfigManager.reset()
         Registry.reset()
         self._namespace_features_api_map.clear()
