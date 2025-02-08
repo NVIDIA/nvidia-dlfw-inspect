@@ -87,7 +87,8 @@ def end_debug():
 
 def step():
     global DEBUG_MANAGER
-    DEBUG_MANAGER.step()
+    if DEBUG_MANAGER is not None:
+        DEBUG_MANAGER.step()
 
 
 def list_features():
