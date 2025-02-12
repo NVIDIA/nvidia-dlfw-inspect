@@ -17,6 +17,8 @@ from contextlib import suppress
 
 import torch
 
+import yaml 
+
 import nvdlfw_inspect.api as debug_api
 from nvdlfw_inspect.config_manager import ConfigManager, ConfigSpec, is_layer_in_cfg
 from nvdlfw_inspect.debug_features.generic_feature_api import GenericConfigAPIMapper
@@ -78,8 +80,8 @@ def test_layer_selection():
 
 def test_multiple_configs():
     debug_api.initialize(
-        config_file=pathlib.Path(__file__).resolve().parent
-        / "test_configs/basic_stat_collection.yaml"
+        config_file=str(pathlib.Path(__file__).resolve().parent
+        / "test_configs/basic_stat_collection.yaml")
     )
 
     cfg1 = ConfigManager.get_config_for_layer("decoder.1.self_attention.qkv")
@@ -94,8 +96,29 @@ def test_multiple_configs():
 
     debug_api.end_debug()
 
+def test_multiple_configs_dict():
+
+    # Read the YAML file and convert it to a Python dict
+    config_path = pathlib.Path(__file__).resolve().parent / "test_configs/basic_stat_collection.yaml"
+    with open(config_path, 'r') as f:
+        config_dict = yaml.safe_load(f)
+
+    debug_api.initialize(config_file=config_dict)
+
+    cfg1 = ConfigManager.get_config_for_layer("decoder.1.self_attention.qkv")
+    cfg2 = ConfigManager.get_config_for_layer("decoder.2.mlp.fc1")
+
+    assert cfg1["base"]["LogTensorStats"]["tensors"] == ["gradient"]
+    assert cfg2["base"]["LogTensorStats"]["tensors"] == ["activation"]
+
+    with suppress(ValueError):
+        # This should fail.
+        cfg2 = ConfigManager.get_config_for_layer("decoder.2.mlp.fc2")
+
+    debug_api.end_debug()
 
 def test_config_parsing():
+
     debug_api.initialize(
         config_file=pathlib.Path(__file__).resolve().parent
         / "test_configs/stats_collection_test_config.yaml"
@@ -140,7 +163,6 @@ def test_config_parsing():
     }
 
     debug_api.end_debug()
-
 
 if __name__ == "__main__":
     pass

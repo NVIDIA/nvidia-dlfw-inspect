@@ -16,6 +16,7 @@ import inspect
 import logging
 import re
 from abc import abstractmethod
+import pathlib
 
 import yaml
 
@@ -154,10 +155,10 @@ class ConfigManager:
         """Parse the config from either a file path or a Python dictionary and set spec attributes.
         
         Args:
-            config_input: Either a filepath to a YAML config or a Python dictionary containing config
+            config_input: Either a filepath (str or Path) or a Python dictionary containing config
             registry_data: Registry data containing feature information
         """
-        if isinstance(config_input, str):
+        if isinstance(config_input, (str, pathlib.Path)):
             # Handle YAML file input
             try:
                 with open(config_input) as f:
@@ -179,7 +180,7 @@ class ConfigManager:
             )
         else:
             raise TypeError(
-                f"Config input must be either a filepath string or a dictionary, got {type(config_input)}"
+                f"Config input must be either a filepath (str or Path) or a dictionary, got {type(config_input)}"
             )
 
         for config_name in config:
