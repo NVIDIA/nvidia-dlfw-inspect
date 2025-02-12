@@ -182,7 +182,8 @@ class ConfigManager:
                 f"Config input must be either a filepath string or a dictionary, got {type(config_input)}"
             )
 
-        for config_name, cfg in config.items():
+        for config_name in config:
+            cfg = config[config_name]
             assert "enabled" in cfg, (
                 f"[NVDLFW INSPECT ERROR] Missing required config field `enabled` under {config_name} context."
             )
