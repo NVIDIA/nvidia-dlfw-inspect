@@ -16,6 +16,7 @@ import inspect
 import logging
 import re
 from abc import abstractmethod
+import pathlib
 
 import yaml
 
@@ -150,20 +151,37 @@ class ConfigManager:
     layer_name_to_config_cache = {}  # noqa: RUF012
 
     @classmethod
-    def _load_config(cls, filepath, registry_data):
-        """Parse the config file and set spec attributes."""
-        try:
-            with open(filepath) as f:
-                config = yaml.safe_load(f)
-                get_logger().log_message(
-                    f"Reading config from {filepath}.", level=logging.INFO
+    def _load_config(cls, config_input, registry_data):
+        """Parse the config from either a file path or a Python dictionary and set spec attributes.
+        
+        Args:
+            config_input: Either a filepath (str or Path) or a Python dictionary containing config
+            registry_data: Registry data containing feature information
+        """
+        if isinstance(config_input, (str, pathlib.Path)):
+            # Handle YAML file input
+            try:
+                with open(config_input) as f:
+                    config = yaml.safe_load(f)
+                    get_logger().log_message(
+                        f"Reading config from {config_input}.", level=logging.INFO
+                    )
+            except FileNotFoundError:
+                print_rank_0(
+                    f"[NVDLFW INSPECT WARNING]: Could not find config file at {config_input}. Please make sure file path to config exists. "
+                    "Running without config. "
                 )
-        except FileNotFoundError:
-            print_rank_0(
-                f"[NVDLFW INSPECT WARNING]: Could not find config file at {filepath}. Please make sure file path to config exists. "
-                "Running without config. "
+                return
+        elif isinstance(config_input, dict):
+            # Handle Python dictionary input
+            config = config_input
+            get_logger().log_message(
+                "Reading config from Python dictionary.", level=logging.INFO
             )
-            return
+        else:
+            raise TypeError(
+                f"Config input must be either a filepath (str or Path) or a dictionary, got {type(config_input)}"
+            )
 
         for config_name in config:
             cfg = config[config_name]
@@ -197,10 +215,10 @@ class ConfigManager:
                 )
 
         get_logger().log_message(
-            f"Loaded configs for {config.keys()}.", level=logging.INFO
+            f"Loaded configs for {list(config.keys())}.", level=logging.INFO
         )
         assert len(cls.configs) > 0, (
-            f"[NVDLFW INSPECT ERROR] Could not load config from '{filepath}'. Ensure config template is correct."
+            f"[NVDLFW INSPECT ERROR] Could not load config from input. Ensure config format is correct."
         )
 
     @classmethod
