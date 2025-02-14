@@ -66,7 +66,7 @@ def initialize(
     DEBUG_MANAGER.load_config()
 
 
-def log_message(msg, layer_name=None, level=logging.INFO):
+def log_message(msg, layer_name=None, level=logging.INFO, extra_cachable_args=None):
     global DEBUG_MANAGER
     if not DEBUG_MANAGER:
         raise RuntimeError(
@@ -75,7 +75,7 @@ def log_message(msg, layer_name=None, level=logging.INFO):
     current_frame = inspect.currentframe()
     caller_frame = current_frame.f_back
     APICacheIdentifier.save_call_details(caller_frame)
-    SingleMessageLogger.log_message_once(msg, layer_name, level)
+    SingleMessageLogger.log_message_once(msg, layer_name, level, extra_cachable_args)
 
 
 def end_debug():
@@ -87,7 +87,8 @@ def end_debug():
 
 def step():
     global DEBUG_MANAGER
-    DEBUG_MANAGER._trainer_iteration_count += 1
+    if DEBUG_MANAGER is not None:
+        DEBUG_MANAGER.step()
 
 
 def list_features():

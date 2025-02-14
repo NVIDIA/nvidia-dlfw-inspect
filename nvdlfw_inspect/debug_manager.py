@@ -171,6 +171,7 @@ class DebugManager:
         return self._namespace_apis[name]
 
     def close(self):
+        self._invoke_for_each_namespace("end_debug")
         ConfigManager.reset()
         Registry.reset()
         self._namespace_features_api_map.clear()
@@ -208,3 +209,14 @@ class DebugManager:
             print_rank_0(
                 f"Invalid type is provided to the features argument. {method_helper_str}"
             )
+
+    def step(self):
+        self._trainer_iteration_count += 1
+        self._invoke_for_each_namespace("step")
+
+    def _invoke_for_each_namespace(self, function_name):
+        # It can be used to run such calls like step()
+        # that may need to be handled by the feature namespaces.
+        for namespace_name in Registry.data:
+            namespace = Registry.data[namespace_name]
+            getattr(namespace.api, function_name, lambda: None)()

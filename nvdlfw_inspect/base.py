@@ -271,6 +271,12 @@ class BaseNamespaceAPI(ABC):
                 level=logging.ERROR,
             )
             sys.exit(1)
+    
+    def step(self):
+        pass
+    
+    def end_debug(self):
+        pass
 
     def __getattr__(self, api_name):
         return partial(self.route_api, api_name=api_name)
