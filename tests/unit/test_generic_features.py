@@ -70,3 +70,49 @@ def test_statistics_collection():
 
     debug_api.end_debug()
     reset_debug_log()
+
+def test_statistics_collection_resume_training():
+    debug_api.initialize(
+        config_file=pathlib.Path(__file__).resolve().parent
+        / "test_configs/stats_collection_test_config.yaml",
+        default_logging_enabled=False,
+        init_training_step=65,
+    )
+    tensor1 = torch.rand((100, 5))
+
+    debug_api.step()
+    gradient_stats_step66 = debug_api.log_tensor_stats(
+        "decoder.1.mlp.fc1", tensor=tensor1, tensor_name="gradient"
+    )
+
+    for stat in ["max", "l1_norm", "min"]:
+        assert stat in gradient_stats_step66
+
+    assert gradient_stats_step66["max"] == tensor1.max()
+
+    debug_api.step()
+    gradient_stats_step67 = debug_api.log_tensor_stats(
+        "decoder.1.mlp.fc1", tensor=tensor1, tensor_name="gradient"
+    )
+    assert gradient_stats_step67 == {}
+
+    debug_api.update_training_step(99)
+
+    gradient_stats_step99 = debug_api.log_tensor_stats(
+        "decoder.1.mlp.fc1", tensor=tensor1, tensor_name="gradient"
+    )
+    for stat in ["max", "l1_norm", "min"]:
+        assert stat in gradient_stats_step99
+
+    assert gradient_stats_step99["max"] == tensor1.max()
+
+    debug_api.step()
+
+    gradient_stats_step100 = debug_api.log_tensor_stats(
+        "decoder.1.mlp.fc1", tensor=tensor1, tensor_name="gradient"
+    )
+
+    assert gradient_stats_step100 == {}
+
+    debug_api.end_debug()
+    reset_debug_log()

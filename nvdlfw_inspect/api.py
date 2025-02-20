@@ -29,6 +29,7 @@ def initialize(
     feature_dirs=None,
     statistics_logger: BaseLogger | None = None,
     log_dir=".",
+    init_training_step=0,
     **kwargs,
 ):
     """
@@ -43,6 +44,8 @@ def initialize(
                 default = None
     log_dir: str, path to directory which will hold the 'debug_logs' and 'debug_statistics_logs'
                 default = "."
+    init_training_step: int, set training step iteration
+                default = 0
     **kwargs:
         tb_writer (TensorBoardWriter, optional): A TensorBoard writer to use for logging.
                 default = None
@@ -61,6 +64,7 @@ def initialize(
         feature_dirs=feature_dirs,
         statistics_logger=statistics_logger,
         log_dir=log_dir,
+        init_training_step=init_training_step,
         **kwargs,
     )
     DEBUG_MANAGER.load_config()
@@ -84,6 +88,11 @@ def end_debug():
         DEBUG_MANAGER.close()
         DEBUG_MANAGER = None
 
+
+def update_training_step(train_step: int):
+    global DEBUG_MANAGER
+    if DEBUG_MANAGER is not None:
+        DEBUG_MANAGER.update_training_step(train_step)
 
 def step():
     global DEBUG_MANAGER
