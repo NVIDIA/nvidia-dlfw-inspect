@@ -125,6 +125,7 @@ import nvdlfw_inspect.api as debug_api
 ```
 
 ### 2. Initializing the Tool.
+
 In your main block, initialize the tool using:
 
 ```
@@ -142,12 +143,14 @@ This function must be called once on every rank in global context to initialize 
 * **config_file** ( *str* , default=""): Path to the `config.yaml` file specifying features and layer names.
 * **feature_dirs** ( *List[str] | str* ): Directories containing custom features to load. If empty, only [default features](/nvdlfw_inspect/debug_features) are available. In the example above feature directory for [FakeQuantization](/examples/sample_namespace) is provided
 * **log_dir** ( *str* , default= "."): Directory where logs and statistics will be stored. The tool creates two subdirectories in the `log_dir` path: `nvdlfw_inspect_logs` and `nvdlfw_inspect_statistics_logs`
+* **init_training_step** ( *int* , default=0): Set the training step counter.
 * **statistics_logger** ( *Union[BaseLogger, None]* , default=None): Custom Logger for logging tensor statistics. Should adhere to `BaseLogger` from the Nvidia-DLFramework-Inspect package.
 * **tb_writer** ( *TensorBoardWriter* , default=None): TensorBoard writer for logging.
 
 ### 3. Debug Config Yaml
 
 Below is an example configuration file used in ths guide: [debug config](/examples/configs/simple_model_train_sample.yaml)
+
 ```
 sample_model_train_log_stats:
   enabled: True
@@ -191,7 +194,16 @@ sample_model_train_log_stats:
 
 ### 4. debug_api.step()
 
-The tool maintains an internal training step counter which can be used by different features. In this example, **log_tensor_stats** uses this to determine if the tensor statistics need to be logged for the current training step. This should be added in the main training loop after each forward-backward pass.
+The tool maintains an internal training step counter which can be used by different features. In this example, **log_tensor_stats** uses this to determine if the tensor statistics need to be logged for the current training step. This should be added in the main training loop after each forward-backward pass. If resuming training from a checkpoint, you can set the training step counter in two ways.
+First would be to pass it during the initialization:
+```
+debug_api.initialize(
+        ...,
+        init_training_step={TRAIN_STEP}
+    )
+```
+The other way is to call the following method after initialization:
+`debug_api.initialize_training_step({TRAIN_STEP})`
 
 ## Logs
 
