@@ -211,7 +211,7 @@ class DebugManager:
                 f"Invalid type is provided to the features argument. {method_helper_str}"
             )
 
-    def update_training_step(self, train_step: int):
+    def initialize_training_step(self, train_step: int):
         self._trainer_iteration_count = train_step
 
     def step(self):

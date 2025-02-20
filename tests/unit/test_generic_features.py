@@ -71,6 +71,7 @@ def test_statistics_collection():
     debug_api.end_debug()
     reset_debug_log()
 
+
 def test_statistics_collection_resume_training():
     debug_api.initialize(
         config_file=pathlib.Path(__file__).resolve().parent
@@ -96,7 +97,7 @@ def test_statistics_collection_resume_training():
     )
     assert gradient_stats_step67 == {}
 
-    debug_api.update_training_step(99)
+    debug_api.initialize_training_step(99)
 
     gradient_stats_step99 = debug_api.log_tensor_stats(
         "decoder.1.mlp.fc1", tensor=tensor1, tensor_name="gradient"

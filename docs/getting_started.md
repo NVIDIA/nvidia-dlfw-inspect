@@ -203,7 +203,7 @@ debug_api.initialize(
     )
 ```
 The other way is to call the following method after initialization:
-`debug_api.update_training_step({TRAIN_STEP})`
+`debug_api.initialize_training_step({TRAIN_STEP})`
 
 ## Logs
 

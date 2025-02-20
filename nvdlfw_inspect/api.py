@@ -89,10 +89,11 @@ def end_debug():
         DEBUG_MANAGER = None
 
 
-def update_training_step(train_step: int):
+def initialize_training_step(train_step: int):
     global DEBUG_MANAGER
     if DEBUG_MANAGER is not None:
-        DEBUG_MANAGER.update_training_step(train_step)
+        DEBUG_MANAGER.initialize_training_step(train_step)
+
 
 def step():
     global DEBUG_MANAGER
