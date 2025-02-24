@@ -153,7 +153,7 @@ class ConfigManager:
     @classmethod
     def _load_config(cls, config_input, registry_data):
         """Parse the config from either a file path or a Python dictionary and set spec attributes.
-        
+
         Args:
             config_input: Either a filepath (str or Path) or a Python dictionary containing config
             registry_data: Registry data containing feature information
@@ -218,7 +218,7 @@ class ConfigManager:
             f"Loaded configs for {list(config.keys())}.", level=logging.INFO
         )
         assert len(cls.configs) > 0, (
-            f"[NVDLFW INSPECT ERROR] Could not load config from input. Ensure config format is correct."
+            "[NVDLFW INSPECT ERROR] Could not load config from input. Ensure config format is correct."
         )
 
     @classmethod

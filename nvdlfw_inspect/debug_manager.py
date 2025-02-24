@@ -36,6 +36,7 @@ class DebugManager:
         feature_dirs=None,
         statistics_logger: BaseLogger | None = None,
         log_dir=".",
+        init_training_step=0,
         **kwargs,
     ):
         self._features_explainer = {}
@@ -46,7 +47,7 @@ class DebugManager:
         self._load_namespace_apis_and_features(feature_dirs)
         self.config_file = config_file
 
-        self._trainer_iteration_count = 0
+        self._trainer_iteration_count = init_training_step
         self._tensor_reduction_group = None
         self._api_caller_details = None
 
@@ -209,6 +210,9 @@ class DebugManager:
             print_rank_0(
                 f"Invalid type is provided to the features argument. {method_helper_str}"
             )
+
+    def initialize_training_step(self, train_step: int):
+        self._trainer_iteration_count = train_step
 
     def step(self):
         self._trainer_iteration_count += 1
