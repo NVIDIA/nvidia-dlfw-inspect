@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import gc
 import copy
 import logging
 import sys
@@ -161,23 +162,24 @@ class BaseNamespaceAPI(ABC):
         """
         self.input_assertions_hook(api_name, **kwargs)
 
-        uid = APICacheIdentifier.get_unique_identifier(
-            self._cacheable_api_kwargs_map, layer_name, api_name, **kwargs
-        )
+        # uid = APICacheIdentifier.get_unique_identifier(
+        #     self._cacheable_api_kwargs_map, layer_name, api_name, **kwargs
+        # )
+        uid = None
 
-        if uid not in get_logger().logged_api_encountered:
-            debug_api.log_message(
-                f"Debug API call '{api_name}' encountered at the line: {APICacheIdentifier.get_call_details()}",
-                level=logging.DEBUG,
-            )
-            get_logger().logged_api_encountered.add(uid)
+        # if uid not in get_logger().logged_api_encountered:
+        #     debug_api.log_message(
+        #         f"Debug API call '{api_name}' encountered at the line: {APICacheIdentifier.get_call_details()}",
+        #         level=logging.DEBUG,
+        #     )
+        #     get_logger().logged_api_encountered.add(uid)
 
-        if uid is not None and uid in self._api_cache:
-            if self._api_cache[uid] is not None:
-                return self._api_cache[uid][0](
-                    self._api_cache[uid][1], layer_name, **kwargs
-                )
-            return {}
+        # if uid is not None and uid in self._api_cache:
+        #     if self._api_cache[uid] is not None:
+        #         return self._api_cache[uid][0](
+        #             self._api_cache[uid][1], layer_name, **kwargs
+        #         )
+        #     return {}
 
         layer_config = ConfigManager.get_config_for_layer(layer_name).get(self.name, {})
         features_to_invoke = {}  # feature_name -> feature_config
@@ -208,10 +210,10 @@ class BaseNamespaceAPI(ABC):
         if len(features_to_invoke) == 0:
             # Use default API if no features found or feature not in layer
             if self._default_api_map and api_name in self._default_api_map:
-                self._api_cache[uid] = (self._default_api_map[api_name], {})
+                # self._api_cache[uid] = (self._default_api_map[api_name], {})
                 return self._default_api_map[api_name]({}, layer_name, **kwargs)
             else:
-                self._api_cache[uid] = None
+                # self._api_cache[uid] = None
                 return {}
 
         if len(features_to_invoke) > 1:
@@ -250,20 +252,21 @@ class BaseNamespaceAPI(ABC):
         try:
             feat_name = list(features_to_invoke.keys())[0]  # noqa: RUF015
             feat_config = features_to_invoke[feat_name]
-            self._api_cache[uid] = (
-                getattr(self.namespace_features[feat_name], api_name),
-                feat_config,
-            )
+            # self._api_cache[uid] = (
+            #     getattr(self.namespace_features[feat_name], api_name),
+            #     feat_config,
+            # )
             ret = getattr(self.namespace_features[feat_name], api_name)(
                 feat_config, layer_name, **kwargs
             )
-            if uid not in get_logger().logged_api_executed:
-                debug_api.log_message(
-                    f"Debug API call '{api_name}' found and the corresponding debug feature '{feat_name}' was called.",
-                    level=logging.DEBUG,
-                )
-                get_logger().logged_api_executed.add(uid)
+            # if uid not in get_logger().logged_api_executed:
+            #     debug_api.log_message(
+            #         f"Debug API call '{api_name}' found and the corresponding debug feature '{feat_name}' was called.",
+            #         level=logging.DEBUG,
+            #     )
+            #     get_logger().logged_api_executed.add(uid)
             self.output_assertions_hook(api_name, ret, **kwargs)
+            gc.collect()
             return ret  # noqa: TRY300
         except AttributeError:
             debug_api.log_message(
