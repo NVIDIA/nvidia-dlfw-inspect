@@ -76,9 +76,7 @@ def log_message(msg, layer_name=None, level=logging.INFO, extra_cachable_args=No
         raise RuntimeError(
             "[NVDLFW INSPECT ERROR] Debug manager not initialized. Call initialize first."
         )
-    current_frame = inspect.currentframe()
-    caller_frame = current_frame.f_back
-    APICacheIdentifier.save_call_details(caller_frame)
+    APICacheIdentifier.save_call_details()
     SingleMessageLogger.log_message_once(msg, layer_name, level, extra_cachable_args)
 
 
@@ -179,7 +177,5 @@ def __getattr__(name):
         raise RuntimeError(
             "[NVDLFW INSPECT ERROR] Debug manager not initialized. Call initialize first."
         )
-    current_frame = inspect.currentframe()
-    caller_frame = current_frame.f_back
-    APICacheIdentifier.save_call_details(caller_frame)
+    APICacheIdentifier.save_call_details()
     return DEBUG_MANAGER.get_extension_api(name)
