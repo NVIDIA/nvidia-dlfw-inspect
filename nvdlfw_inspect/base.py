@@ -265,7 +265,6 @@ class BaseNamespaceAPI(ABC):
                 )
                 get_logger().logged_api_executed.add(uid)
             self.output_assertions_hook(api_name, ret, **kwargs)
-            # gc.collect()
             return ret  # noqa: TRY300
         except AttributeError:
             debug_api.log_message(
