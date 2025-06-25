@@ -180,6 +180,6 @@ def __getattr__(name):
         raise RuntimeError(
             "[NVDLFW INSPECT ERROR] Debug manager not initialized. Call initialize first."
         )
-    current_frame = sys._getframe(1)
-    APICacheIdentifier.save_call_details(current_frame)
+    caller_frame = sys._getframe(1)
+    APICacheIdentifier.save_call_details(caller_frame)
     return DEBUG_MANAGER.get_extension_api(name)
