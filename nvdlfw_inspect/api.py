@@ -14,6 +14,7 @@
 
 import inspect
 import logging
+import sys
 
 import torch
 import torch.distributed
@@ -76,7 +77,7 @@ def log_message(msg, layer_name=None, level=logging.INFO, extra_cachable_args=No
         raise RuntimeError(
             "[NVDLFW INSPECT ERROR] Debug manager not initialized. Call initialize first."
         )
-    current_frame = inspect.currentframe()
+    current_frame = sys._getframe(1)
     caller_frame = current_frame.f_back
     APICacheIdentifier.save_call_details(caller_frame)
     SingleMessageLogger.log_message_once(msg, layer_name, level, extra_cachable_args)
@@ -179,7 +180,6 @@ def __getattr__(name):
         raise RuntimeError(
             "[NVDLFW INSPECT ERROR] Debug manager not initialized. Call initialize first."
         )
-    current_frame = inspect.currentframe()
-    caller_frame = current_frame.f_back
-    APICacheIdentifier.save_call_details(caller_frame)
+    current_frame = sys._getframe(1)
+    APICacheIdentifier.save_call_details(current_frame)
     return DEBUG_MANAGER.get_extension_api(name)

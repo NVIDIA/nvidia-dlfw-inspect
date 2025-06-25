@@ -153,7 +153,7 @@ class SingleMessageLogger:
     def log_message_once(
         cls, message, layer_name=None, level=logging.INFO, extra_cachable_args=None
     ):
-        caller_frame = inspect.currentframe().f_back
+        caller_frame = sys._getframe(1)  
         feature_call_details = (
             f"{caller_frame.f_code.co_filename}.{caller_frame.f_lineno}"
         )
