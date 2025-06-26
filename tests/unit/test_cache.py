@@ -21,9 +21,7 @@ FILE_NAME = __file__
 
 
 def make_call():
-    current_frame = inspect.currentframe()
-    caller_frame = current_frame.f_back
-    APICacheIdentifier.save_call_details(caller_frame)
+    APICacheIdentifier.save_call_details()
 
 
 def assert_equal(actual, expected):

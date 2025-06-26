@@ -126,8 +126,11 @@ class APICacheIdentifier:
     _call_details: str
 
     @classmethod
-    def save_call_details(cls, caller_frame):
+    def save_call_details(cls):
+        current_frame = inspect.currentframe()
+        caller_frame = current_frame.f_back.f_back # 2 back since nvdlfw.api routes here
         cls._call_details = f"{caller_frame.f_code.co_filename}.{caller_frame.f_lineno}"
+        del current_frame, caller_frame
 
     @classmethod
     def get_call_details(cls):

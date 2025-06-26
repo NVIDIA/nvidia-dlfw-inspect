@@ -42,7 +42,7 @@ $(DEV_LOCAL_VENV): requirements-dev-local.txt
 
 .PHONY: test
 test: ## Run tests
-	@pytest
+	@pytest -vvv -s
 
 .PHONY: dev-env
 dev-env: $(DEV_VENV) ## Create dev enviroment for pre-commit checks
