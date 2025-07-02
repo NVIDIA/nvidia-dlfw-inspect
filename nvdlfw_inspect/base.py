@@ -270,14 +270,14 @@ class BaseNamespaceAPI(ABC):
             print(e, file=sys.stderr)
             sys.exit(1)
     
-    def handle_multi_feature_output(self, api_name, multi_feature_out, features_to_invoke, **kwargs):
+    def handle_multi_feature_output(self, api_name, multi_feature_outputs, features_to_invoke, **kwargs):
         # Basic scenario: all features should return the same output.
         custom_assert(
-            all(x == multi_feature_out[0] for x in multi_feature_out),
+            all(x == multi_feature_outputs[0] for x in multi_feature_outputs),
             "Different Outputs when invoking multiple features per API call is not allowed. "
-            + f"Found {len(features_to_invoke)} ops {features_to_invoke.keys()} enabled for {api_name}({kwargs}) returning outputs: {multi_feature_out}.",
+            + f"Found {len(features_to_invoke)} ops {features_to_invoke.keys()} enabled for {api_name}({kwargs}) returning outputs: {multi_feature_outputs}.",
         )
-        return multi_feature_out[0]
+        return multi_feature_outputs[0]
 
     def step(self):
         pass
