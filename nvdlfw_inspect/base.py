@@ -243,11 +243,12 @@ class BaseNamespaceAPI(ABC):
                     )
                     self.output_assertions_hook(api_name, multi_feature_out[0], **kwargs)
                     return multi_feature_out[0]
-            except AttributeError:
+            except AttributeError as e:
                 debug_api.log_message(
-                    f"Could not run API {api_name} for multiple features {features_to_invoke.keys()}. Exiting.",
+                    f"Could not run API {api_name} for multiple features {features_to_invoke.keys()} - got error: {e}. Exiting.",
                     level=logging.ERROR,
                 )
+                print(e, file=sys.stderr)
                 sys.exit(1)
 
         try:
@@ -268,11 +269,12 @@ class BaseNamespaceAPI(ABC):
                 get_logger().logged_api_executed.add(uid)
             self.output_assertions_hook(api_name, ret, **kwargs)
             return ret  # noqa: TRY300
-        except AttributeError:
+        except AttributeError as e:
             debug_api.log_message(
-                f"Could not run API {api_name} in feature {features_to_invoke.keys()}. Exiting.",
+                f"Could not run API {api_name} in feature {features_to_invoke.keys()} - got error: {e}. Exiting.",
                 level=logging.ERROR,
             )
+            print(e, file=sys.stderr)
             sys.exit(1)
 
     def step(self):
