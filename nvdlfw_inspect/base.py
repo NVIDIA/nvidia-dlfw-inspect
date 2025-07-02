@@ -232,17 +232,10 @@ class BaseNamespaceAPI(ABC):
                         level=logging.DEBUG,
                     )
                     get_logger().logged_api_executed.add(uid)
-                # Only supporting basic scenario, should be moved to specific API class for more complex support for a given api
-                if hasattr(self, "handle_multi_tensor_output"):
-                    multi_feature_out = self.handle_multi_tensor_output(api_name, multi_feature_out)
-                else:
-                    custom_assert(
-                        all(x == multi_feature_out[0] for x in multi_feature_out),
-                        "Different Outputs when invoking multiple features per API call is not allowed. "
-                        + "Found {len(features_to_invoke)} ops {features_to_invoke.keys()} enabled for {api_name}({kwargs}) returning outputs: {multi_feature_out}.",
-                    )
-                    self.output_assertions_hook(api_name, multi_feature_out[0], **kwargs)
-                    return multi_feature_out[0]
+                for out in multi_feature_out:
+                    self.output_assertions_hook(api_name, out, **kwargs)
+                return self.handle_multi_feature_output(api_name, multi_feature_out, features_to_invoke, **kwargs)
+                    
             except AttributeError as e:
                 debug_api.log_message(
                     f"Could not run API {api_name} for multiple features {features_to_invoke.keys()} - got error: {e}. Exiting.",
@@ -276,6 +269,15 @@ class BaseNamespaceAPI(ABC):
             )
             print(e, file=sys.stderr)
             sys.exit(1)
+    
+    def handle_multi_feature_output(self, api_name, multi_feature_out, features_to_invoke, **kwargs):
+        # Basic scenario: all features should return the same output.
+        custom_assert(
+            all(x == multi_feature_out[0] for x in multi_feature_out),
+            "Different Outputs when invoking multiple features per API call is not allowed. "
+            + f"Found {len(features_to_invoke)} ops {features_to_invoke.keys()} enabled for {api_name}({kwargs}) returning outputs: {multi_feature_out}.",
+        )
+        return multi_feature_out[0]
 
     def step(self):
         pass
