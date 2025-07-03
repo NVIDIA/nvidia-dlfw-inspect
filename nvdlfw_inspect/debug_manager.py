@@ -177,6 +177,7 @@ class DebugManager:
         Registry.reset()
         self._namespace_features_api_map.clear()
         self._namespace_apis.clear()
+        MetricLogger.enabled_loggers.clear()
 
     def list_features(self):
         print_rank_0(list(self._features_explainer.keys()))
