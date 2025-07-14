@@ -6,10 +6,13 @@ This document provides step-by-step instructions to set up and install the `nvdl
 
 ## Installation Options
 
+## Installing via Pip
+
+NVDLFW-Inspect has very minimal dependecies and can be directly installed in an environment that already has torch and numpy (we don't enforce the versions for these libraries but are tested for `torch>=2.4.0` and `numpy==1.26.4`). This method is also applicable if you're running inside a Nvidia PyTorch container.
 
 ### 1. Installing Directly via GitHub
 
-You can install `nvdlfw_inspect` directly from its GitHub repository using `pip`, assuming you already have the pytorch docker container running
+You can install `nvdlfw_inspect` directly from its GitHub repository, assuming you already have the required torch and numpy versions:
 
 `pip install git+https://github.com/NVIDIA/nvidia-dlfw-inspect`
 
@@ -19,11 +22,11 @@ You can also clone the repostory, run `pip install .` / `make install` or run in
 
 The installation can be verified by running `python3 -c "import nvdlfw_inspect"`.
 
-### 3. Using the PyTorch Docker Container
+## Installing via Docker
 
 1. **Pull the NVIDIA PyTorch Docker Image**:
 
-`docker pull nvcr.io/nvidia/pytorch:24.12-py3`
+`docker pull nvcr.io/nvidia/pytorch:24.12-py3` (or any other version).
 
 2. **Build the Docker Image**:
 Run the following command from the root of the project directory (where the `Makefile` is located):
@@ -35,9 +38,9 @@ Launch an interactive container with GPU support:
 
 `make docker-run`
 
-### 4. Development Setup
+## Development Setup
 
-For local development (when not using a pytorch container), you can set up the local development environment by running: `make dev-local` and then source `source dev_local_venv/bin/activate`
+For local development (when not using a nvidia-pytorch container), you can set up the local development environment by running: `make dev-local` and then source `source dev_local_venv/bin/activate`
 
 To contribute or modify the tool, you can also set up a development environment: `make dev-env` and activate the virtual environment `source dev_venv/bin/activate`. This can only be used for running the pre-commit checks: `make check`
 

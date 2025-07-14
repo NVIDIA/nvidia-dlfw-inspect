@@ -39,6 +39,7 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.8",
+    install_requires=["pyyaml==6.0.2"],
     extras_require={
         "dev": ["pre-commit==4.1.0", "pytest==8.1.1", "ruff==0.9.3"],
     },
