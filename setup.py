@@ -39,6 +39,14 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.8",
+    install_requires=[
+        "pyyaml>=6.0.0",  # Required for config file parsing
+        # Note: torch and numpy are expected to be pre-installed in most environments
+        # (e.g., NVIDIA PyTorch containers). We specify them here with flexible
+        # version constraints to ensure compatibility without forcing reinstallation.
+        "torch>=2.4.0",
+        "numpy==1.26.4",
+    ],
     extras_require={
         "dev": ["pre-commit==4.1.0", "pytest==8.1.1", "ruff==0.9.3"],
     },

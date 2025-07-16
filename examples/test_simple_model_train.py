@@ -90,10 +90,13 @@ if __name__ == "__main__":
     assert os.path.exists(debug_feature_dir), (
         f"Debug Feature Directory: {debug_feature_dir} not found"
     )
+
+    debug_output_dir = "/tmp/nvdlfw_inspect"
+    print(f"Debug Output Directory: {debug_output_dir}")
     debug_api.initialize(
         debug_config_file,
         feature_dirs=[debug_feature_dir],
-        log_dir="/tmp/nvdlfw_inspect",
+        log_dir=debug_output_dir,
     )
 
     input_size = 8

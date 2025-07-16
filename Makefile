@@ -15,7 +15,7 @@ DOCKER_IMAGE_NAME = nvdlfw_inspect
 .PHONY: install
 install: ## Install nvdlfw_inspect
 	@pip install .
-	@python3 -c "import torch; import numpy" || { echo >&2 "Error: 'torch' and/or 'numpy' are not installed in your environment. Please ensure they are pre-installed."; exit 1; }
+	@python3 -c "import torch; import numpy; import yaml" || { echo >&2 "Error: 'torch' and/or 'numpy', and/or 'yaml' are not installed in your environment. Please ensure they are pre-installed."; exit 1; }
 
 .PHONY: docker-build
 docker-build: ## Build Docker Images
@@ -66,12 +66,12 @@ check: ## Run pre-commit checks
 .PHONY: clean-build
 clean-build: ## Remove .egg-info, build/ and dist/ directories
 	@echo "Cleaning up build artifacts: .egg-info, build/, and dist/ directories"
-	-rm -rf build/ *.egg-info dist/ || echo "Warning: Failed to remove some build artifacts. Check permissions."
+	-rm -r build/ *.egg-info dist/ || echo "Warning: Failed to remove some build artifacts. Files may not exist or you may lack sufficient permissions."
 
 .PHONY: clean-venv
 clean-venv: ## Remove all the venvs
 	@echo "Removing all virtual environments: $(DEV_VENV), $(DEV_LOCAL_VENV)"
-	-rm -rf $(DEV_VENV) $(DEV_LOCAL_VENV) || echo "Warning: Failed to remove some virtual environment files. Check permissions."
+	-rm -r $(DEV_VENV) $(DEV_LOCAL_VENV) || echo "Warning: Failed to remove some virtual environment files. Directories may not exist or you may lack sufficient permissions."
 
 .PHONY: clean-docker
 clean-docker: ## Remove the docker image
