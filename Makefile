@@ -15,7 +15,7 @@ DOCKER_IMAGE_NAME = nvdlfw_inspect
 .PHONY: install
 install: ## Install nvdlfw_inspect
 	@pip install .
-	@python3 -c "import torch; import numpy" || { echo >&2 "Error: 'torch' and/or 'numpy' are not installed in your environment. Please ensure they are pre-installed."; exit 1; }
+	@python3 -c "import torch; import numpy; import yaml" || { echo >&2 "Error: 'torch' and/or 'numpy', and/or 'yaml' are not installed in your environment. Please ensure they are pre-installed."; exit 1; }
 
 .PHONY: docker-build
 docker-build: ## Build Docker Images
