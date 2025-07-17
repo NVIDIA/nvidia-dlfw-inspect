@@ -222,8 +222,12 @@ class BaseNamespaceAPI(ABC):
             try:
                 multi_feature_out = []
                 for feat_name, feat_config in features_to_invoke.items():
-                    ret = getattr(self.namespace_features[feat_name], api_name)(
-                        feat_config, layer_name, **kwargs
+                    ret = self.call_feature(
+                        getattr(self.namespace_features[feat_name], api_name),
+                        feat_name,
+                        feat_config,
+                        layer_name,
+                        **kwargs
                     )
                     multi_feature_out.append(ret)
                 if uid not in get_logger().logged_api_executed:
@@ -248,11 +252,8 @@ class BaseNamespaceAPI(ABC):
             feat_name = list(features_to_invoke.keys())[0]  # noqa: RUF015
             feat_config = features_to_invoke[feat_name]
             self._api_cache[uid] = (
-                getattr(self.namespace_features[feat_name], api_name),
+                self.call_feature(getattr(self.namespace_features[feat_name], api_name), feat_name, feat_config, layer_name, **kwargs),
                 feat_config,
-            )
-            ret = getattr(self.namespace_features[feat_name], api_name)(
-                feat_config, layer_name, **kwargs
             )
             if uid not in get_logger().logged_api_executed:
                 debug_api.log_message(
@@ -278,6 +279,11 @@ class BaseNamespaceAPI(ABC):
             + f"Found {len(features_to_invoke)} ops {features_to_invoke.keys()} enabled for {api_name}({kwargs}) returning outputs: {multi_feature_outputs}.",
         )
         return multi_feature_outputs[0]
+
+    def call_feature(self, call, feat_name, feat_config, layer_name, **kwargs):
+        return call(
+            feat_config, layer_name, **kwargs
+        )
 
     def step(self):
         pass
