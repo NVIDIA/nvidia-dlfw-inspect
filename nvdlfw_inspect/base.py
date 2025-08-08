@@ -174,8 +174,11 @@ class BaseNamespaceAPI(ABC):
 
         if uid is not None and uid in self._api_cache:
             if self._api_cache[uid] is not None:
-                return self._api_cache[uid][0](
-                    self._api_cache[uid][1], layer_name, **kwargs
+                self.call_feature(
+                    self._api_cache[uid][0],
+                    self._api_cache[uid][1],
+                    layer_name,
+                    **kwargs
                 )
             return {}
 
@@ -224,7 +227,6 @@ class BaseNamespaceAPI(ABC):
                 for feat_name, feat_config in features_to_invoke.items():
                     ret = self.call_feature(
                         getattr(self.namespace_features[feat_name], api_name),
-                        feat_name,
                         feat_config,
                         layer_name,
                         **kwargs
@@ -252,7 +254,7 @@ class BaseNamespaceAPI(ABC):
             feat_name = list(features_to_invoke.keys())[0]  # noqa: RUF015
             feat_config = features_to_invoke[feat_name]
             self._api_cache[uid] = (
-                self.call_feature(getattr(self.namespace_features[feat_name], api_name), feat_name, feat_config, layer_name, **kwargs),
+                getattr(self.namespace_features[feat_name], api_name),
                 feat_config,
             )
             if uid not in get_logger().logged_api_executed:
@@ -261,6 +263,12 @@ class BaseNamespaceAPI(ABC):
                     level=logging.DEBUG,
                 )
                 get_logger().logged_api_executed.add(uid)
+            ret = self.call_feature(
+                getattr(self.namespace_features[feat_name], api_name),
+                feat_config,
+                layer_name,
+                **kwargs
+            )
             self.output_assertions_hook(api_name, ret, **kwargs)
             return ret  # noqa: TRY300
         except AttributeError as e:
@@ -280,7 +288,7 @@ class BaseNamespaceAPI(ABC):
         )
         return multi_feature_outputs[0]
 
-    def call_feature(self, call, feat_name, feat_config, layer_name, **kwargs):
+    def call_feature(self, call, feat_config, layer_name, **kwargs):
         return call(
             feat_config, layer_name, **kwargs
         )
