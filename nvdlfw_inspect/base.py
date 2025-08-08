@@ -174,8 +174,11 @@ class BaseNamespaceAPI(ABC):
 
         if uid is not None and uid in self._api_cache:
             if self._api_cache[uid] is not None:
-                return self._api_cache[uid][0](
-                    self._api_cache[uid][1], layer_name, **kwargs
+                return self.call_feature(
+                    self._api_cache[uid][0],
+                    self._api_cache[uid][1],
+                    layer_name,
+                    **kwargs
                 )
             return {}
 
@@ -222,8 +225,11 @@ class BaseNamespaceAPI(ABC):
             try:
                 multi_feature_out = []
                 for feat_name, feat_config in features_to_invoke.items():
-                    ret = getattr(self.namespace_features[feat_name], api_name)(
-                        feat_config, layer_name, **kwargs
+                    ret = self.call_feature(
+                        getattr(self.namespace_features[feat_name], api_name),
+                        feat_config,
+                        layer_name,
+                        **kwargs
                     )
                     multi_feature_out.append(ret)
                 if uid not in get_logger().logged_api_executed:
@@ -251,15 +257,18 @@ class BaseNamespaceAPI(ABC):
                 getattr(self.namespace_features[feat_name], api_name),
                 feat_config,
             )
-            ret = getattr(self.namespace_features[feat_name], api_name)(
-                feat_config, layer_name, **kwargs
-            )
             if uid not in get_logger().logged_api_executed:
                 debug_api.log_message(
                     f"Debug API call '{api_name}' found and the corresponding debug feature '{feat_name}' was called.",
                     level=logging.DEBUG,
                 )
                 get_logger().logged_api_executed.add(uid)
+            ret = self.call_feature(
+                getattr(self.namespace_features[feat_name], api_name),
+                feat_config,
+                layer_name,
+                **kwargs
+            )
             self.output_assertions_hook(api_name, ret, **kwargs)
             return ret  # noqa: TRY300
         except AttributeError as e:
@@ -278,6 +287,11 @@ class BaseNamespaceAPI(ABC):
             + f"Found {len(features_to_invoke)} ops {features_to_invoke.keys()} enabled for {api_name}({kwargs}) returning outputs: {multi_feature_outputs}.",
         )
         return multi_feature_outputs[0]
+
+    def call_feature(self, call, feat_config, layer_name, **kwargs):
+        return call(
+            feat_config, layer_name, **kwargs
+        )
 
     def step(self):
         pass
