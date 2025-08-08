@@ -174,7 +174,7 @@ class BaseNamespaceAPI(ABC):
 
         if uid is not None and uid in self._api_cache:
             if self._api_cache[uid] is not None:
-                self.call_feature(
+                return self.call_feature(
                     self._api_cache[uid][0],
                     self._api_cache[uid][1],
                     layer_name,
