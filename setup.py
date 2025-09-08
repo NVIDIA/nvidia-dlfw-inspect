@@ -24,7 +24,7 @@ setuptools.setup(
     description="Facilitates debugging convergence issues and testing new algorithms/recipes for training LLMs using Nvidia libraries.",
     long_description=README,
     long_description_content_type="text/markdown",
-    version="0.1.0",
+    version="0.2.1",
     url="https://github.com/NVIDIA/nvidia-dlfw-inspect",
     license="Apache2",
     packages=["nvdlfw_inspect"],
