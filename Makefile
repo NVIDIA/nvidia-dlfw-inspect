@@ -15,7 +15,7 @@ DOCKER_IMAGE_NAME = nvdlfw_inspect
 .PHONY: install
 install: ## Install nvdlfw_inspect
 	@pip install .
-	@python3 -c "import torch; import numpy; import yaml" || { echo >&2 "Error: 'torch' and/or 'numpy', and/or 'yaml' are not installed in your environment. Please ensure they are pre-installed."; exit 1; }
+	@python3 -c "import torch; import yaml" || { echo >&2 "Error: 'torch' and/or 'yaml' are not installed in your environment. Please ensure they are pre-installed."; exit 1; }
 
 .PHONY: docker-build
 docker-build: ## Build Docker Images
@@ -48,8 +48,8 @@ test: ## Run tests
 dev-env: $(DEV_VENV) ## Create dev enviroment for pre-commit checks
 	@echo "Installing dependencies for dev environment..."
 	$(DEV_PIP) install -e .[dev]
-	@$(DEV_PYTHON) -c "import torch; import numpy" || { \
-	    echo >&2 "Warning: 'torch' and/or 'numpy' are not installed in your virtual environment and will not run the tests"; \
+	@$(DEV_PYTHON) -c "import torch" || { \
+	    echo >&2 "Warning: 'torch' is not installed in your virtual environment and will not run the tests"; \
 	}
 	@echo "To activate the dev environment, run: source $(DEV_VENV)/bin/activate"
 
