@@ -8,18 +8,17 @@ This document provides step-by-step instructions to set up and install the `nvdl
 
 `nvdlfw_inspect` requires the following dependencies:
 - Python >= 3.8
-- PyTorch >= 2.4.0
-- NumPy == 1.26.4
+- PyTorch >= 2.1.0
 - PyYAML >= 6.0.0
 
-**Note:** When using NVIDIA PyTorch Docker containers, PyTorch and NumPy are typically pre-installed. The `pip install` command will automatically skip reinstalling packages that already meet the version requirements.
+**Note:** When using NVIDIA PyTorch Docker containers, PyTorch is typically pre-installed. The `pip install` command will automatically skip reinstalling packages that already meet the version requirements.
 
 
 ## Installation Options
 
 ## Installing via Pip
 
-NVDLFW-Inspect has very minimal dependecies and can be directly installed in an environment that already has torch and numpy (we don't enforce the versions for these libraries but are tested for `torch>=2.4.0` and `numpy==1.26.4`). This method is also applicable if you're running inside a Nvidia PyTorch container.
+NVDLFW-Inspect has very minimal dependecies and can be directly installed in an environment that already has torch (we don't enforce the versions for these libraries but are tested for `torch>=2.1.0`). This method is also applicable if you're running inside a Nvidia PyTorch container.
 
 ### 1. Installing Directly via GitHub
 
